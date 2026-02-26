@@ -1,49 +1,80 @@
-package com.proyecto1.inndata020.entity;
+package com.persona.proyectoPersona.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
 
-@Entity
-@Table(name = "departamento")
-public class DepartamentoEntity {
-    @Id //Es una annotation que nos dice cual atributo es una llave primaria
+@Entity // Esto le dice que es una entidad;
+@Table(name = "persona") // Aqui agregamos el nombre de tabla que viene desde el MySQL;
+public class PersonaEntity {
+
+    // Definimos el ID
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
-    @Column(name = "m2")
-    private Integer m2;
-    @Column(name = "precio")
-    private Double precio;
+    private Integer id_persona;
 
-    public DepartamentoEntity(Integer id, Integer m2, Double precio) {
-        this.id = id;
-        this.m2 = m2;
-        this.precio = precio;
+    // Mapeamos cada columna de campo
+
+    @Column(name = "nombre")
+    private String nombre;
+
+    @Column(name = "direccion")
+    private String direccion;
+
+    @Column(name = "edad")
+    private Integer edad;
+
+    @Column(name = "id_departamento")
+    private Integer id_departamento;
+
+    // Constructor vacio
+
+    public PersonaEntity() {
     }
 
-    public DepartamentoEntity() {
+    // Getter y Setter
+
+    public Integer getId_persona() {
+        return id_persona;
     }
 
-    public Integer getId() {
-        return id;
+    public void setId_persona(Integer id_persona) {
+        this.id_persona = id_persona;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public String getNombre() {
+        return nombre;
     }
 
-    public Integer getM2() {
-        return m2;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public void setM2(Integer m2) {
-        this.m2 = m2;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public Double getPrecio() {
-        return precio;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
-    public void setPrecio(Double precio) {
-        this.precio = precio;
+    public Integer getEdad() {
+        return edad;
+    }
+
+    public void setEdad(Integer edad) {
+        this.edad = edad;
+    }
+
+    public Integer getId_departamento() {
+        return id_departamento;
+    }
+
+    public void setId_departamento(Integer id_departamento) {
+        this.id_departamento = id_departamento;
     }
 }
