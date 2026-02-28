@@ -1,7 +1,7 @@
-package com.persona.proyectoPersona.controller;
+package com.proyecto1.inndata020.controller;
 
-import com.persona.proyectoPersona.entity.PersonaEntity;
-import com.persona.proyectoPersona.service.IPersonaService;
+import com.proyecto1.inndata020.entity.PersonaEntity;
+import com.proyecto1.inndata020.service.IPersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
