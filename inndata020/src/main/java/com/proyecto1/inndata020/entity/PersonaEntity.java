@@ -1,4 +1,4 @@
-package com.persona.proyectoPersona.entity;
+package com.proyecto1.inndata020.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

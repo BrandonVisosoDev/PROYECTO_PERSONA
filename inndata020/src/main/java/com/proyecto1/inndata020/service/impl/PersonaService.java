@@ -1,8 +1,8 @@
-package com.persona.proyectoPersona.service.impl;
+package com.proyecto1.inndata020.service.impl;
 
-import com.persona.proyectoPersona.entity.PersonaEntity;
-import com.persona.proyectoPersona.repository.PersonaRepository;
-import com.persona.proyectoPersona.service.IPersonaService;
+import com.proyecto1.inndata020.entity.PersonaEntity;
+import com.proyecto1.inndata020.repository.PersonaRepository;
+import com.proyecto1.inndata020.service.IPersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
