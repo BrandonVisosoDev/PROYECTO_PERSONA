@@ -2,6 +2,27 @@ package com.proyecto1.inndata020.repository;
 
 import com.proyecto1.inndata020.entity.PersonaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import java.util.List;
 
 public interface PersonaRepository extends JpaRepository<PersonaEntity, Integer> {
+
+
+    @Query("SELECT p FROM PersonaEntity p WHERE p.idDepartamento = :idDepartamento")
+    List<PersonaEntity> findByDepartamento(@Param("idDepartamento") Long idDepartamento);
+
+    List<PersonaEntity> findByIdDepartamento(Long idDepartamento);
+
+
+    @Query("SELECT p FROM PersonaEntity p WHERE p.edad BETWEEN :minEdad AND :maxEdad")
+    List<PersonaEntity> findByEdadBetweenCustom(@Param("minEdad") int minEdad, @Param("maxEdad") int maxEdad);
+
+    List<PersonaEntity> findByEdadBetween(int minEdad, int maxEdad);
+
+
+
+
+
+
 }

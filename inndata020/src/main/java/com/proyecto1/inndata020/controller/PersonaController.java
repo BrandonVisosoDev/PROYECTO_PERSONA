@@ -3,9 +3,12 @@ package com.proyecto1.inndata020.controller;
 import com.proyecto1.inndata020.entity.PersonaEntity;
 import com.proyecto1.inndata020.service.IPersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/persona")
@@ -43,4 +46,34 @@ public class PersonaController {
         return personaService.actualizarPersona(id, persona);
     }
 
+    // Borrado lógico
+    @DeleteMapping("/{id}")
+    public PersonaEntity borrarLogico(@PathVariable Integer id) {
+        return personaService.borrarLogico(id);
+    }
+
+
+
+    // Obtener personas por departamento
+    @GetMapping("/departamento/{idDepartamento}")
+    public List<PersonaEntity> obtenerPorDepartamento(@PathVariable Long idDepartamento) {
+        return personaService.obtenerPersonasPorDepartamento(idDepartamento);
+
+
+    }
+    // Filtrar por edad y obtener
+    @GetMapping("/edad")
+    public List<PersonaEntity> obtenerPorRangoEdad(
+            @RequestParam int minEdad,
+            @RequestParam int maxEdad) {
+        return personaService.obtenerPersonasPorRangoEdad(minEdad, maxEdad);
+    }
+
+
+
+
+
+
+
 }
+

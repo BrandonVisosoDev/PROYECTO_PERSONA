@@ -1,5 +1,6 @@
 package com.proyecto1.inndata020.service.impl;
 
+import java.util.Optional;
 import com.proyecto1.inndata020.entity.PersonaEntity;
 import com.proyecto1.inndata020.repository.PersonaRepository;
 import com.proyecto1.inndata020.service.IPersonaService;
@@ -36,14 +37,34 @@ public class PersonaService implements IPersonaService {
             personaExistente.setNombre(persona.getNombre());
             personaExistente.setDireccion(persona.getDireccion());
             personaExistente.setEdad(persona.getEdad());
-            personaExistente.setId_departamento(persona.getId_departamento());
+            personaExistente.setIdDepartamento(persona.getIdDepartamento()); // <-- camelCase
             return personaRepository.save(personaExistente);
         }
         return null;
     }
 
     @Override
-    public void eliminarPersona(Integer id) {
-        personaRepository.deleteById(id);
+    public PersonaEntity borrarLogico(Integer id) {
+        PersonaEntity personaExistente = personaRepository.findById(id).orElse(null);
+        if (personaExistente != null) {
+            personaExistente.setActivo(false);
+            return personaRepository.save(personaExistente);
+        }
+        return null;
     }
+
+    @Override
+    public List<PersonaEntity> obtenerPersonasPorDepartamento(Long idDepartamento) {
+        return personaRepository.findByIdDepartamento(idDepartamento);
+    }
+
+    @Override
+    public List<PersonaEntity> obtenerPersonasPorRangoEdad(int minEdad, int maxEdad) {
+        return personaRepository.findByEdadBetween(minEdad, maxEdad);
+    }
+
+
+
+
+
 }

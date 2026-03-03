@@ -16,6 +16,10 @@ public interface IPersonaService {
 
     PersonaEntity actualizarPersona(Integer id, PersonaEntity persona);
 
-    void eliminarPersona(Integer id);
+    PersonaEntity borrarLogico(Integer id);
+
+    List<PersonaEntity> obtenerPersonasPorDepartamento(Long idDepartamento);
+    List<PersonaEntity> obtenerPersonasPorRangoEdad(int minEdad, int maxEdad);
+
 
 }

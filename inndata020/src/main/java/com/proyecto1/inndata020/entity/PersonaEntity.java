@@ -7,17 +7,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 
-@Entity // Esto le dice que es una entidad;
-@Table(name = "persona") // Aqui agregamos el nombre de tabla que viene desde el MySQL;
+@Entity
+@Table(name = "persona")
 public class PersonaEntity {
-
-    // Definimos el ID
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_persona;
-
-    // Mapeamos cada columna de campo
+    @Column(name = "id_persona") // columna en la BD
+    private Integer idPersona;   // atributo en camelCase
 
     @Column(name = "nombre")
     private String nombre;
@@ -28,22 +25,30 @@ public class PersonaEntity {
     @Column(name = "edad")
     private Integer edad;
 
-    @Column(name = "id_departamento")
-    private Integer id_departamento;
+    @Column(name = "id_departamento") // columna en la BD
+    private Integer idDepartamento;   // atributo en camelCase
 
-    // Constructor vacio
+    @Column(name = "activo")
+    private Boolean activo = true;
 
-    public PersonaEntity() {
+    public Boolean getActivo() {
+        return activo;
     }
 
-    // Getter y Setter
-
-    public Integer getId_persona() {
-        return id_persona;
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
-    public void setId_persona(Integer id_persona) {
-        this.id_persona = id_persona;
+    // Constructor vacío
+    public PersonaEntity() {}
+
+    // Getters y Setters
+    public Integer getIdPersona() {
+        return idPersona;
+    }
+
+    public void setIdPersona(Integer idPersona) {
+        this.idPersona = idPersona;
     }
 
     public String getNombre() {
@@ -70,11 +75,11 @@ public class PersonaEntity {
         this.edad = edad;
     }
 
-    public Integer getId_departamento() {
-        return id_departamento;
+    public Integer getIdDepartamento() {
+        return idDepartamento;
     }
 
-    public void setId_departamento(Integer id_departamento) {
-        this.id_departamento = id_departamento;
+    public void setIdDepartamento(Integer idDepartamento) {
+        this.idDepartamento = idDepartamento;
     }
 }
