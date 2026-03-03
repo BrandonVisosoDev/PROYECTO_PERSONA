@@ -18,7 +18,7 @@ public interface PersonaRepository extends JpaRepository<PersonaEntity, Integer>
     List<PersonaEntity> findByIdDepartamento(Long idDepartamento);
 
     // Query
-    
+
     @Query("SELECT p FROM PersonaEntity p WHERE p.edad BETWEEN :minEdad AND :maxEdad")
     List<PersonaEntity> findByEdadBetweenCustom(@Param("minEdad") int minEdad, @Param("maxEdad") int maxEdad);
 

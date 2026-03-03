@@ -55,12 +55,14 @@ public class PersonaService implements IPersonaService {
 
     @Override
     public List<PersonaEntity> obtenerPersonasPorDepartamento(Long idDepartamento) {
-        return personaRepository.findByIdDepartamento(idDepartamento);
+        return personaRepository.findByIdDepartamento(idDepartamento); // JPA Derivado
+        // return personaRepository.findByDepartamento(idDepartamento); // @Query
     }
 
     @Override
     public List<PersonaEntity> obtenerPersonasPorRangoEdad(int minEdad, int maxEdad) {
-        return personaRepository.findByEdadBetween(minEdad, maxEdad);
+        return personaRepository.findByEdadBetween(minEdad, maxEdad); // JPA Derivado
+        // return personaRepository.findByEdadBetweenCustom(minEdad, maxEdad); // @Query
     }
 
 

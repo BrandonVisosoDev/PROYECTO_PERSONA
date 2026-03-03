@@ -57,16 +57,17 @@ public class PersonaController {
     // Obtener personas por departamento
     @GetMapping("/departamento/{idDepartamento}")
     public List<PersonaEntity> obtenerPorDepartamento(@PathVariable Long idDepartamento) {
-        return personaService.obtenerPersonasPorDepartamento(idDepartamento);
-
-
+        return personaService.obtenerPersonasPorDepartamento(idDepartamento); // JPA Derivado
+        // return personaService.obtenerPersonasPorDepartamento(idDepartamento); // @Query (misma llamada, cambia solo en el Service/Repository)
     }
+
     // Filtrar por edad y obtener
     @GetMapping("/edad")
     public List<PersonaEntity> obtenerPorRangoEdad(
             @RequestParam int minEdad,
             @RequestParam int maxEdad) {
-        return personaService.obtenerPersonasPorRangoEdad(minEdad, maxEdad);
+        return personaService.obtenerPersonasPorRangoEdad(minEdad, maxEdad); // JPA Derivado
+        // return personaService.obtenerPersonasPorRangoEdad(minEdad, maxEdad); // @Query (misma llamada, cambia solo en el Service/Repository)
     }
 
 
