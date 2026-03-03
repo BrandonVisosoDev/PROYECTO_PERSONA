@@ -26,6 +26,7 @@ public interface PersonaRepository extends JpaRepository<PersonaEntity, Integer>
 
     List<PersonaEntity> findByEdadBetween(int minEdad, int maxEdad);
 
+    // Falta aprender lo visto ayer en clase
 
 
 
