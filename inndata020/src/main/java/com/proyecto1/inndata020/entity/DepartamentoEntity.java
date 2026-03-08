@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class DepartamentoEntity {
     @Id //Es una annotation que nos dice cual atributo es una llave primaria
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id_departamento")
     private Integer id;
     @Column(name = "m2")
     private Integer m2;

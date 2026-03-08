@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "id_persona", url = "https://69ac8d709ca639a5217f29e2.mockapi.io")
+@FeignClient(name = "personaClient", url = "https://69ac8d709ca639a5217f29e2.mockapi.io")
 public interface PersonaClient {
 
     @GetMapping("/persona")

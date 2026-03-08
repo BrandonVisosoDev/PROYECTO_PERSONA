@@ -30,9 +30,6 @@ public class PersonaEntity {
     @Column(name = "edad")
     private Integer edad;
 
-    @Column(name = "id_departamento") // columna en la BD
-    private Integer idDepartamento;   // atributo en camelCase
-
     @Column(name = "activo")
     private Boolean activo = true;
 

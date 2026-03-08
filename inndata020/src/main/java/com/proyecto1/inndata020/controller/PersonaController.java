@@ -26,17 +26,17 @@ public class PersonaController {
         return personaService.buscarPorId(id);
     }
 
-    @PostMapping("/personas")
+    @PostMapping("/personasguardar")
     public String guardarPersona(@RequestBody PersonaDtoRequest persona) {
         return personaService.guardarPersona(persona);
     }
 
-    @PutMapping("/personas/{id}")
+    @PutMapping("/personasactualizar/{id}")
     public String actualizarPersona(@PathVariable Integer id, @RequestBody PersonaDtoRequest persona) {
         return personaService.actualizarPersona(id, persona);
     }
 
-    @DeleteMapping("/personas/{id}")
+    @DeleteMapping("/personaseliminar/{id}")
     public String borrarLogico(@PathVariable Integer id) {
         return personaService.borrarLogico(id);
     }
