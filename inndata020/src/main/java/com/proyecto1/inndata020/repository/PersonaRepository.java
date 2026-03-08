@@ -8,28 +8,17 @@ import java.util.List;
 
 public interface PersonaRepository extends JpaRepository<PersonaEntity, Integer> {
 
-    // Query
-
-    @Query("SELECT p FROM PersonaEntity p WHERE p.idDepartamento = :idDepartamento")
-    List<PersonaEntity> findByDepartamento(@Param("idDepartamento") Long idDepartamento);
-
-    // JPA
-
-    List<PersonaEntity> findByIdDepartamento(Long idDepartamento);
+    // JPA Derivado
+    List<PersonaEntity> findByDepartamento_Id(Integer idDepartamento); // ✅ navega la relación
 
     // Query
+    @Query("SELECT p FROM PersonaEntity p WHERE p.departamento.id = :idDepartamento")
+    List<PersonaEntity> findByDepartamento(@Param("idDepartamento") Integer idDepartamento); // ✅
 
+    // JPA Derivado
+    List<PersonaEntity> findByEdadBetween(Integer minEdad, Integer maxEdad); // ✅ int → Integer
+
+    // Query
     @Query("SELECT p FROM PersonaEntity p WHERE p.edad BETWEEN :minEdad AND :maxEdad")
-    List<PersonaEntity> findByEdadBetweenCustom(@Param("minEdad") int minEdad, @Param("maxEdad") int maxEdad);
-
-    // JPA
-
-    List<PersonaEntity> findByEdadBetween(int minEdad, int maxEdad);
-
-    
-
-
-
-
-
+    List<PersonaEntity> findByEdadBetweenCustom(@Param("minEdad") Integer minEdad, @Param("maxEdad") Integer maxEdad); // ✅
 }

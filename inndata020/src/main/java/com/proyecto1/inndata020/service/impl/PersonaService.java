@@ -1,13 +1,19 @@
 package com.proyecto1.inndata020.service.impl;
 
-import java.util.Optional;
+import com.proyecto1.inndata020.model.DepartamentoDtoRequest;
+import com.proyecto1.inndata020.model.PersonaDtoRequest;
+import com.proyecto1.inndata020.model.PersonaDtoResponse;
+import com.proyecto1.inndata020.entity.DepartamentoEntity;
 import com.proyecto1.inndata020.entity.PersonaEntity;
+import com.proyecto1.inndata020.repository.DepartamentoRepository;
 import com.proyecto1.inndata020.repository.PersonaRepository;
 import com.proyecto1.inndata020.service.IPersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PersonaService implements IPersonaService {
@@ -15,58 +21,104 @@ public class PersonaService implements IPersonaService {
     @Autowired
     private PersonaRepository personaRepository;
 
-    @Override
-    public List<PersonaEntity> listarPersonas() {
-        return personaRepository.findAll();
-    }
+    @Autowired
+    private DepartamentoRepository departamentoRepository;
 
-    @Override
-    public PersonaEntity buscarPorId(Integer id) {
-        return personaRepository.findById(id).orElse(null);
-    }
 
-    @Override
-    public PersonaEntity guardarPersona(PersonaEntity persona) {
-        return personaRepository.save(persona);
-    }
+    private PersonaDtoResponse toResponse(PersonaEntity persona) {
+        PersonaDtoResponse dto = new PersonaDtoResponse();
+        dto.setNombre(persona.getNombre());
+        dto.setDireccion(persona.getDireccion());
+        dto.setEdad(persona.getEdad());
+        dto.setActivo(persona.getActivo());
 
-    @Override
-    public PersonaEntity actualizarPersona(Integer id, PersonaEntity persona) {
-        PersonaEntity personaExistente = personaRepository.findById(id).orElse(null);
-        if (personaExistente != null) {
-            personaExistente.setNombre(persona.getNombre());
-            personaExistente.setDireccion(persona.getDireccion());
-            personaExistente.setEdad(persona.getEdad());
-            personaExistente.setIdDepartamento(persona.getIdDepartamento()); // <-- camelCase
-            return personaRepository.save(personaExistente);
+        if (persona.getDepartamento() != null) {
+            DepartamentoDtoRequest depDto = new DepartamentoDtoRequest();
+            depDto.setId(persona.getDepartamento().getId());
+            depDto.setM2(persona.getDepartamento().getM2());
+            depDto.setPrecio(persona.getDepartamento().getPrecio());
+            depDto.setActivo(persona.getDepartamento().getActivo());
+            dto.setDepartamento(depDto);
         }
-        return null;
+        return dto;
     }
 
     @Override
-    public PersonaEntity borrarLogico(Integer id) {
-        PersonaEntity personaExistente = personaRepository.findById(id).orElse(null);
-        if (personaExistente != null) {
-            personaExistente.setActivo(false);
-            return personaRepository.save(personaExistente);
-        }
-        return null;
+    public List<PersonaDtoResponse> listarPersonas() {
+        return personaRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<PersonaEntity> obtenerPersonasPorDepartamento(Long idDepartamento) {
-        return personaRepository.findByIdDepartamento(idDepartamento); // JPA Derivado
-        // return personaRepository.findByDepartamento(idDepartamento); // @Query
+    public Optional<PersonaDtoResponse> buscarPorId(Integer id) {
+        return personaRepository.findById(id)
+                .map(this::toResponse);
     }
 
     @Override
-    public List<PersonaEntity> obtenerPersonasPorRangoEdad(int minEdad, int maxEdad) {
-        return personaRepository.findByEdadBetween(minEdad, maxEdad); // JPA Derivado
-        // return personaRepository.findByEdadBetweenCustom(minEdad, maxEdad); // @Query
+    public String guardarPersona(PersonaDtoRequest request) {
+        DepartamentoEntity departamento = departamentoRepository
+                .findById(request.getId_departamento())
+                .orElse(null);
+
+        if (departamento == null) return "Departamento no encontrado";
+
+        PersonaEntity persona = new PersonaEntity();
+        persona.setNombre(request.getNombre());
+        persona.setDireccion(request.getDireccion());
+        persona.setEdad(request.getEdad());
+        persona.setActivo(request.getActivo());
+        persona.setDepartamento(departamento);
+
+        personaRepository.save(persona);
+        return "Persona creada exitosamente";
     }
 
+    @Override
+    public String actualizarPersona(Integer id, PersonaDtoRequest request) {
+        PersonaEntity persona = personaRepository.findById(id).orElse(null);
+        if (persona == null) return "Persona no encontrada";
 
+        DepartamentoEntity departamento = departamentoRepository
+                .findById(request.getId_departamento())
+                .orElse(null);
+        if (departamento == null) return "Departamento no encontrado";
 
+        persona.setNombre(request.getNombre());
+        persona.setDireccion(request.getDireccion());
+        persona.setEdad(request.getEdad());
+        persona.setActivo(request.getActivo());
+        persona.setDepartamento(departamento);
 
+        personaRepository.save(persona);
+        return "Persona actualizada exitosamente";
+    }
 
+    @Override
+    public String borrarLogico(Integer id) {
+        PersonaEntity persona = personaRepository.findById(id).orElse(null);
+        if (persona == null) return "Persona no encontrada";
+
+        persona.setActivo(false);
+        personaRepository.save(persona);
+        return "Persona desactivada exitosamente";
+    }
+
+    @Override
+    public List<PersonaDtoResponse> obtenerPersonasPorDepartamento(Integer idDepartamento) {
+        return personaRepository.findByDepartamento_Id(idDepartamento)
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PersonaDtoResponse> obtenerPersonasPorRangoEdad(Integer minEdad, Integer maxEdad) {
+        return personaRepository.findByEdadBetween(minEdad, maxEdad)
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
 }
