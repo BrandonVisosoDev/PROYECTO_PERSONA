@@ -30,7 +30,7 @@ public class PersonaService implements IPersonaService {
         dto.setNombre(persona.getNombre());
         dto.setDireccion(persona.getDireccion());
         dto.setEdad(persona.getEdad());
-        dto.setActivo(persona.getActivo());
+
 
         if (persona.getDepartamento() != null) {
             DepartamentoDtoRequest depDto = new DepartamentoDtoRequest();
@@ -38,7 +38,7 @@ public class PersonaService implements IPersonaService {
             depDto.setM2(persona.getDepartamento().getM2());
             depDto.setPrecio(persona.getDepartamento().getPrecio());
             depDto.setActivo(persona.getDepartamento().getActivo());
-            dto.setDepartamento(depDto);
+
         }
         return dto;
     }
