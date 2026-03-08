@@ -24,7 +24,7 @@ public class PersonaService implements IPersonaService {
     @Autowired
     private DepartamentoRepository departamentoRepository;
 
-    // Mapeo Entity → ResponseDTO
+
     private PersonaDtoResponse toResponse(PersonaEntity persona) {
         PersonaDtoResponse dto = new PersonaDtoResponse();
         dto.setNombre(persona.getNombre());
@@ -34,9 +34,9 @@ public class PersonaService implements IPersonaService {
 
         if (persona.getDepartamento() != null) {
             DepartamentoDtoRequest depDto = new DepartamentoDtoRequest();
-            depDto.setId(persona.getDepartamento().getId());         // ⚠️ era id_departamento
+            depDto.setId(persona.getDepartamento().getId());
             depDto.setM2(persona.getDepartamento().getM2());
-            depDto.setPrecio(persona.getDepartamento().getPrecio()); // ⚠️ Double
+            depDto.setPrecio(persona.getDepartamento().getPrecio());
             depDto.setActivo(persona.getDepartamento().getActivo());
             dto.setDepartamento(depDto);
         }
