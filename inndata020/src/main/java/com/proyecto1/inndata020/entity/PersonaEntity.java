@@ -1,11 +1,6 @@
 package com.proyecto1.inndata020.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,5 +35,9 @@ public class PersonaEntity {
 
     @Column(name = "activo")
     private Boolean activo = true;
+
+    @ManyToOne
+    @JoinColumn(name = "id_departamento")
+    private DepartamentoEntity departamento;
 
 }
