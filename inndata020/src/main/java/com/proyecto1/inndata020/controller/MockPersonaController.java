@@ -1,7 +1,7 @@
 package com.proyecto1.inndata020.controller;
 
-import com.proyecto1.inndata020.feign.mockPersona;
-import com.proyecto1.inndata020.service.impl.mockPersonaService;
+import com.proyecto1.inndata020.feign.MockPersona;
+import com.proyecto1.inndata020.service.impl.MockPersonaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,31 +13,30 @@ import java.util.List;
 @RequestMapping("/api/v1")
 public class MockPersonaController {
 
-    private final mockPersonaService mockPersonaService;
-
+    private final MockPersonaService mockPersonaService;
 
     @Autowired
-    public MockPersonaController(mockPersonaService mockPersonaService) {
-        this.mockPersonaService = mockPersonaService;
+    public MockPersonaController(MockPersonaService mockPersonaService) {
+        this.mockPersonaService = mockPersonaService; // nombre correcto en minúscula
     }
 
     @GetMapping("/persona")
-    public List<mockPersona> getAll() {
-        return mockPersonaService.getAll();
+    public List<MockPersona> getAll() {
+        return mockPersonaService.getAll(); // usa la variable correcta
     }
 
     @GetMapping("/persona/{id}")
-    public mockPersona getById(@PathVariable Integer id) {
+    public MockPersona getById(@PathVariable Integer id) {
         return mockPersonaService.getById(id);
     }
 
     @PostMapping("/persona")
-    public mockPersona create(@RequestBody mockPersona persona) {
+    public MockPersona create(@RequestBody MockPersona persona) {
         return mockPersonaService.create(persona);
     }
 
     @PutMapping("/persona/{id}")
-    public mockPersona update(@PathVariable Integer id, @RequestBody mockPersona persona) {
+    public MockPersona update(@PathVariable Integer id, @RequestBody MockPersona persona) {
         return mockPersonaService.update(id, persona);
     }
 
