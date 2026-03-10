@@ -14,15 +14,19 @@ import java.util.Optional;
 @Service
 public class DepartamentoService implements IDepartamentoService {
 
+    private final DepartamentoRepository departamentoRepository;
+
     @Autowired
-    DepartamentoRepository departamentoRepository;
+    public DepartamentoService(DepartamentoRepository departamentoRepository) {
+        this.departamentoRepository = departamentoRepository;
+    }
 
     @Override
     public List<DepartamentoEntity> readAll() {
         List<DepartamentoEntity> info = departamentoRepository.findAll();
         List<DepartamentoEntity> filtrada = new ArrayList<>();
         for (DepartamentoEntity d : info) {
-            if (d.getActivo()) {
+            if (Boolean.TRUE.equals(d.getActivo())) {
                 filtrada.add(d);
             }
         }

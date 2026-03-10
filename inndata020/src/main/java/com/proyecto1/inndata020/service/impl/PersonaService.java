@@ -12,16 +12,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 @Service
 public class PersonaService implements IPersonaService {
 
-    @Autowired
-    private PersonaRepository personaRepository;
+    private final PersonaRepository personaRepository;
+    private final DepartamentoRepository departamentoRepository;
 
     @Autowired
-    private DepartamentoRepository departamentoRepository;
+    public PersonaService(PersonaRepository personaRepository, DepartamentoRepository departamentoRepository) {
+        this.personaRepository = personaRepository;
+        this.departamentoRepository = departamentoRepository;
+    }
 
     private PersonaDtoResponse toResponse(PersonaEntity persona) {
         PersonaDtoResponse dto = new PersonaDtoResponse();
@@ -36,15 +39,15 @@ public class PersonaService implements IPersonaService {
     public List<PersonaDtoResponse> listarPersonas() {
         return personaRepository.findAll()
                 .stream()
-                .filter(persona -> persona.getActivo()) // ✅ solo activos
+                .filter(PersonaEntity::getActivo)
                 .map(this::toResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public Optional<PersonaDtoResponse> buscarPorId(Integer id) {
         return personaRepository.findById(id)
-                .filter(persona -> persona.getActivo()) // ✅ solo si está activo
+                .filter(PersonaEntity::getActivo) // ✅ solo si está activo
                 .map(this::toResponse);
     }
 
@@ -101,17 +104,17 @@ public class PersonaService implements IPersonaService {
     public List<PersonaDtoResponse> obtenerPersonasPorDepartamento(Integer idDepartamento) {
         return personaRepository.findByDepartamento_Id(idDepartamento)
                 .stream()
-                .filter(persona -> persona.getActivo()) // ✅ solo activos
+                .filter(PersonaEntity::getActivo) // ✅ solo activos
                 .map(this::toResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public List<PersonaDtoResponse> obtenerPersonasPorRangoEdad(Integer minEdad, Integer maxEdad) {
         return personaRepository.findByEdadBetween(minEdad, maxEdad)
                 .stream()
-                .filter(persona -> persona.getActivo()) // ✅ solo activos
+                .filter(PersonaEntity::getActivo) // ✅ solo activos
                 .map(this::toResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

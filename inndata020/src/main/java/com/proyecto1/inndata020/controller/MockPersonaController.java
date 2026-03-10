@@ -11,10 +11,15 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1")
-public class mockPersonaController {
+public class MockPersonaController {
+
+    private final mockPersonaService mockPersonaService;
+
 
     @Autowired
-    mockPersonaService mockPersonaService;
+    public MockPersonaController(mockPersonaService mockPersonaService) {
+        this.mockPersonaService = mockPersonaService;
+    }
 
     @GetMapping("/persona")
     public List<mockPersona> getAll() {

@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 
 
 
-public class mockPersona {
+public class MockPersona {
 
         private String nombre;
         private String direccion;
         private Integer edad;
-        private Integer id_departamento;
+        private Integer idDepartamento;
         private Boolean activo;
 
 }

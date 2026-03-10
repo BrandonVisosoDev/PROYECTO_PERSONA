@@ -1,6 +1,6 @@
 package com.proyecto1.inndata020.entity;
 
-import com.proyecto1.inndata020.feign.mockPersona;
+import com.proyecto1.inndata020.feign.MockPersona;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,16 +10,16 @@ import java.util.List;
 public interface PersonaClient {
 
     @GetMapping("/persona")
-    List<mockPersona> getAll();
+    List<MockPersona> getAll();
 
     @GetMapping("/persona/{id}")
-    mockPersona getById(@PathVariable("id") Integer id);
+    MockPersona getById(@PathVariable("id") Integer id);
 
     @PostMapping("/persona")
-    mockPersona create(@RequestBody mockPersona persona);
+    MockPersona create(@RequestBody MockPersona persona);
 
     @PutMapping("/persona/{id}")
-    mockPersona update(@PathVariable("id") Integer id, @RequestBody mockPersona persona);
+    MockPersona update(@PathVariable("id") Integer id, @RequestBody MockPersona persona);
 
     @DeleteMapping("/persona/{id}")
     void delete(@PathVariable("id") Integer id);

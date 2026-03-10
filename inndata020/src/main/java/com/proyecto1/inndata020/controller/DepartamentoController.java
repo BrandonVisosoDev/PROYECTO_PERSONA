@@ -13,8 +13,15 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class DepartamentoController {
 
+    // Inyección por constructor
+
+    private final DepartamentoService departamentoService;
+
     @Autowired
-    DepartamentoService departamentoService;
+    public DepartamentoController(DepartamentoService departamentoService) {
+        this.departamentoService = departamentoService;
+    }
+
 
     @GetMapping("/departamentos")
     public List<DepartamentoEntity> readAll() {

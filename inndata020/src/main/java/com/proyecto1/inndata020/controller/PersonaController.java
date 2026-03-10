@@ -13,8 +13,12 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class PersonaController {
 
+    private final IPersonaService personaService;
+
     @Autowired
-    private IPersonaService personaService;
+    public PersonaController(IPersonaService personaService) {
+        this.personaService = personaService;
+    }
 
     @GetMapping("/personas")
     public List<PersonaDtoResponse> listarPersonas() {
