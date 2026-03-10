@@ -1,6 +1,5 @@
 package com.proyecto1.inndata020.service.impl;
 
-import com.proyecto1.inndata020.model.DepartamentoDtoRequest;
 import com.proyecto1.inndata020.model.PersonaDtoRequest;
 import com.proyecto1.inndata020.model.PersonaDtoResponse;
 import com.proyecto1.inndata020.entity.DepartamentoEntity;
@@ -24,22 +23,12 @@ public class PersonaService implements IPersonaService {
     @Autowired
     private DepartamentoRepository departamentoRepository;
 
-
     private PersonaDtoResponse toResponse(PersonaEntity persona) {
         PersonaDtoResponse dto = new PersonaDtoResponse();
         dto.setNombre(persona.getNombre());
         dto.setDireccion(persona.getDireccion());
         dto.setEdad(persona.getEdad());
 
-
-        if (persona.getDepartamento() != null) {
-            DepartamentoDtoRequest depDto = new DepartamentoDtoRequest();
-            depDto.setId(persona.getDepartamento().getId());
-            depDto.setM2(persona.getDepartamento().getM2());
-            depDto.setPrecio(persona.getDepartamento().getPrecio());
-            depDto.setActivo(persona.getDepartamento().getActivo());
-
-        }
         return dto;
     }
 
@@ -47,6 +36,7 @@ public class PersonaService implements IPersonaService {
     public List<PersonaDtoResponse> listarPersonas() {
         return personaRepository.findAll()
                 .stream()
+                .filter(persona -> persona.getActivo()) // ✅ solo activos
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }
@@ -54,13 +44,14 @@ public class PersonaService implements IPersonaService {
     @Override
     public Optional<PersonaDtoResponse> buscarPorId(Integer id) {
         return personaRepository.findById(id)
+                .filter(persona -> persona.getActivo()) // ✅ solo si está activo
                 .map(this::toResponse);
     }
 
     @Override
     public String guardarPersona(PersonaDtoRequest request) {
         DepartamentoEntity departamento = departamentoRepository
-                .findById(request.getId_departamento())
+                .findById(request.getIdDepartamento())
                 .orElse(null);
 
         if (departamento == null) return "Departamento no encontrado";
@@ -82,7 +73,7 @@ public class PersonaService implements IPersonaService {
         if (persona == null) return "Persona no encontrada";
 
         DepartamentoEntity departamento = departamentoRepository
-                .findById(request.getId_departamento())
+                .findById(request.getIdDepartamento())
                 .orElse(null);
         if (departamento == null) return "Departamento no encontrado";
 
@@ -110,6 +101,7 @@ public class PersonaService implements IPersonaService {
     public List<PersonaDtoResponse> obtenerPersonasPorDepartamento(Integer idDepartamento) {
         return personaRepository.findByDepartamento_Id(idDepartamento)
                 .stream()
+                .filter(persona -> persona.getActivo()) // ✅ solo activos
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }
@@ -118,6 +110,7 @@ public class PersonaService implements IPersonaService {
     public List<PersonaDtoResponse> obtenerPersonasPorRangoEdad(Integer minEdad, Integer maxEdad) {
         return personaRepository.findByEdadBetween(minEdad, maxEdad)
                 .stream()
+                .filter(persona -> persona.getActivo()) // ✅ solo activos
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }
