@@ -1,5 +1,6 @@
 package com.proyecto1.inndata020.controller;
 
+import com.proyecto1.inndata020.model.MensajeDtoResponse;
 import com.proyecto1.inndata020.model.PersonaDtoRequest;
 import com.proyecto1.inndata020.model.PersonaDtoResponse;
 import com.proyecto1.inndata020.service.IPersonaService;
@@ -35,19 +36,19 @@ public class PersonaController {
     }
 
     @PostMapping("/personasguardar")
-    public String guardarPersona(@RequestBody PersonaDtoRequest persona) {
+    public MensajeDtoResponse guardarPersona(@RequestBody PersonaDtoRequest persona) {
         log.info("Solicitud para guardar persona: {}", persona.getNombre());
         return personaService.guardarPersona(persona);
     }
 
     @PutMapping("/personasactualizar/{id}")
-    public String actualizarPersona(@PathVariable Integer id, @RequestBody PersonaDtoRequest persona) {
+    public MensajeDtoResponse actualizarPersona(@PathVariable Integer id, @RequestBody PersonaDtoRequest persona) {
         log.info("Solicitud para actualizar persona con id: {}", id);
         return personaService.actualizarPersona(id, persona);
     }
 
     @DeleteMapping("/personaseliminar/{id}")
-    public String borrarLogico(@PathVariable Integer id) {
+    public MensajeDtoResponse borrarLogico(@PathVariable Integer id) {
         log.info("Solicitud para desactivar persona con id: {}", id);
         return personaService.borrarLogico(id);
     }

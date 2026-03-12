@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-		 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+        http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.proyecto1</groupId>
@@ -16,7 +16,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.4</version>
+		<version>3.3.1</version>
 		<relativePath/>
 	</parent>
 
@@ -24,11 +24,10 @@
 		<java.version>21</java.version>
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
-		<spring-cloud.version>2023.0.0</spring-cloud.version>
+		<spring-cloud.version>2023.0.3</spring-cloud.version>
 	</properties>
 
 	<dependencies>
-		<!-- Dependencias principales -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -42,7 +41,6 @@
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
 		</dependency>
 
-		<!-- Runtime -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -60,26 +58,15 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- Tests -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
+			<groupId>org.springframework.boot</groupId>          <artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Mockito Inline para evitar el warning del agente -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-inline</artifactId>
-			<version>5.2.0</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- SWAGGER/OPENAPI DEPENDENCIES (Compatible with Spring Boot 3.3.0 and Jakarta) -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.0.4</version>
+			<version>2.5.0</version>
 		</dependency>
 	</dependencies>
 

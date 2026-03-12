@@ -1,4 +1,5 @@
 package com.proyecto1.inndata020.service.impl;
+import com.proyecto1.inndata020.model.MensajeDtoResponse;
 import com.proyecto1.inndata020.model.PersonaDtoRequest;
 import com.proyecto1.inndata020.model.PersonaDtoResponse;
 import com.proyecto1.inndata020.entity.DepartamentoEntity;
@@ -96,7 +97,7 @@ class PersonaServiceTest {
         when(departamentoRepository.findById(1)).thenReturn(Optional.of(departamentoEntity));
         when(personaRepository.save(any(PersonaEntity.class))).thenReturn(personaEntity);
 
-        String resultado = personaService.guardarPersona(personaDtoRequest);
+        MensajeDtoResponse resultado = personaService.guardarPersona(personaDtoRequest);
 
         assertEquals("Persona creada exitosamente", resultado);
         verify(personaRepository, times(1)).save(any(PersonaEntity.class));
@@ -106,7 +107,7 @@ class PersonaServiceTest {
     void guardarPersona_DepartamentoNoExiste() {
         when(departamentoRepository.findById(1)).thenReturn(Optional.empty());
 
-        String resultado = personaService.guardarPersona(personaDtoRequest);
+        MensajeDtoResponse resultado = personaService.guardarPersona(personaDtoRequest);
 
         assertEquals("Departamento no encontrado", resultado);
         verify(personaRepository, never()).save(any());
@@ -118,7 +119,7 @@ class PersonaServiceTest {
         when(departamentoRepository.findById(1)).thenReturn(Optional.of(departamentoEntity));
         when(personaRepository.save(any(PersonaEntity.class))).thenReturn(personaEntity);
 
-        String resultado = personaService.actualizarPersona(1, personaDtoRequest);
+        MensajeDtoResponse resultado = personaService.actualizarPersona(1, personaDtoRequest);
 
         assertEquals("Persona actualizada exitosamente", resultado);
         verify(personaRepository, times(1)).save(any(PersonaEntity.class));
@@ -128,7 +129,7 @@ class PersonaServiceTest {
     void actualizarPersona_NoExiste() {
         when(personaRepository.findById(99)).thenReturn(Optional.empty());
 
-        String resultado = personaService.actualizarPersona(99, personaDtoRequest);
+        MensajeDtoResponse resultado = personaService.actualizarPersona(99, personaDtoRequest);
 
         assertEquals("Persona no encontrada", resultado);
         verify(personaRepository, never()).save(any());
@@ -139,7 +140,7 @@ class PersonaServiceTest {
         when(personaRepository.findById(1)).thenReturn(Optional.of(personaEntity));
         when(personaRepository.save(any(PersonaEntity.class))).thenReturn(personaEntity);
 
-        String resultado = personaService.borrarLogico(1);
+        MensajeDtoResponse resultado = personaService.borrarLogico(1);
 
         assertEquals("Persona desactivada exitosamente", resultado);
         assertFalse(personaEntity.getActivo());
@@ -150,7 +151,7 @@ class PersonaServiceTest {
     void borrarLogico_NoExiste() {
         when(personaRepository.findById(99)).thenReturn(Optional.empty());
 
-        String resultado = personaService.borrarLogico(99);
+        MensajeDtoResponse resultado = personaService.borrarLogico(99);
 
         assertEquals("Persona no encontrada", resultado);
         verify(personaRepository, never()).save(any());
