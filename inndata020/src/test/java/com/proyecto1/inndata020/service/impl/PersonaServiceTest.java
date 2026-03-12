@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataAccessResourceFailureException;
 
 import java.util.List;
 import java.util.Optional;
@@ -67,7 +68,27 @@ class PersonaServiceTest {
 
         assertNotNull(resultado);
         assertEquals(1, resultado.size());
-        assertEquals("Laura García", resultado.get(0).getNombre());
+        assertEquals(personaEntity.getNombre(), resultado.get(0).getNombre());
+        verify(personaRepository, times(1)).findAll();
+    }
+
+    @Test
+    void listarPersonas_FiltraInactivas() {
+        PersonaEntity inactiva = new PersonaEntity();
+        inactiva.setIdPersona(2);
+        inactiva.setNombre("Persona Inactiva");
+        inactiva.setDireccion("Calle X");
+        inactiva.setEdad(30);
+        inactiva.setActivo(false);
+        inactiva.setDepartamento(departamentoEntity);
+
+        when(personaRepository.findAll()).thenReturn(List.of(personaEntity, inactiva));
+
+        List<PersonaDtoResponse> resultado = personaService.listarPersonas();
+
+        assertNotNull(resultado);
+        assertEquals(1, resultado.size());
+        assertEquals(personaEntity.getNombre(), resultado.get(0).getNombre());
         verify(personaRepository, times(1)).findAll();
     }
 
@@ -78,7 +99,18 @@ class PersonaServiceTest {
         Optional<PersonaDtoResponse> resultado = personaService.buscarPorId(1);
 
         assertTrue(resultado.isPresent());
-        assertEquals("Laura García", resultado.get().getNombre());
+        assertEquals(personaEntity.getNombre(), resultado.get().getNombre());
+        verify(personaRepository, times(1)).findById(1);
+    }
+
+    @Test
+    void buscarPorId_Inactiva() {
+        personaEntity.setActivo(false);
+        when(personaRepository.findById(1)).thenReturn(Optional.of(personaEntity));
+
+        Optional<PersonaDtoResponse> resultado = personaService.buscarPorId(1);
+
+        assertTrue(resultado.isEmpty());
         verify(personaRepository, times(1)).findById(1);
     }
 
@@ -88,7 +120,7 @@ class PersonaServiceTest {
 
         Optional<PersonaDtoResponse> resultado = personaService.buscarPorId(99);
 
-        assertFalse(resultado.isPresent());
+        assertTrue(resultado.isEmpty());
         verify(personaRepository, times(1)).findById(99);
     }
 
@@ -99,7 +131,24 @@ class PersonaServiceTest {
 
         MensajeDtoResponse resultado = personaService.guardarPersona(personaDtoRequest);
 
-        assertEquals("Persona creada exitosamente", resultado);
+        assertNotNull(resultado);
+        assertTrue(resultado.getExito());
+        assertEquals("Persona guardada exitosamente", resultado.getMensaje());
+        verify(departamentoRepository, times(1)).findById(1);
+        verify(personaRepository, times(1)).save(any(PersonaEntity.class));
+    }
+
+    @Test
+    void guardarPersona_DataAccessException() {
+        when(departamentoRepository.findById(1)).thenReturn(Optional.of(departamentoEntity));
+        when(personaRepository.save(any(PersonaEntity.class)))
+                .thenThrow(new DataAccessResourceFailureException("db"));
+
+        MensajeDtoResponse resultado = personaService.guardarPersona(personaDtoRequest);
+
+        assertNotNull(resultado);
+        assertFalse(resultado.getExito());
+        assertEquals("Error de acceso a la base de datos: db", resultado.getMensaje());
         verify(personaRepository, times(1)).save(any(PersonaEntity.class));
     }
 
@@ -109,7 +158,9 @@ class PersonaServiceTest {
 
         MensajeDtoResponse resultado = personaService.guardarPersona(personaDtoRequest);
 
-        assertEquals("Departamento no encontrado", resultado);
+        assertNotNull(resultado);
+        assertFalse(resultado.getExito());
+        assertEquals("Error inesperado: Departamento no encontrado", resultado.getMensaje());
         verify(personaRepository, never()).save(any());
     }
 
@@ -121,8 +172,38 @@ class PersonaServiceTest {
 
         MensajeDtoResponse resultado = personaService.actualizarPersona(1, personaDtoRequest);
 
-        assertEquals("Persona actualizada exitosamente", resultado);
+        assertNotNull(resultado);
+        assertTrue(resultado.getExito());
+        assertEquals("Persona actualizada exitosamente", resultado.getMensaje());
         verify(personaRepository, times(1)).save(any(PersonaEntity.class));
+    }
+
+    @Test
+    void actualizarPersona_DataAccessException() {
+        when(personaRepository.findById(1)).thenReturn(Optional.of(personaEntity));
+        when(departamentoRepository.findById(1)).thenReturn(Optional.of(departamentoEntity));
+        when(personaRepository.save(any(PersonaEntity.class)))
+                .thenThrow(new DataAccessResourceFailureException("db"));
+
+        MensajeDtoResponse resultado = personaService.actualizarPersona(1, personaDtoRequest);
+
+        assertNotNull(resultado);
+        assertFalse(resultado.getExito());
+        assertEquals("Error de acceso a la base de datos: db", resultado.getMensaje());
+        verify(personaRepository, times(1)).save(any(PersonaEntity.class));
+    }
+
+    @Test
+    void actualizarPersona_DepartamentoNoExiste() {
+        when(personaRepository.findById(1)).thenReturn(Optional.of(personaEntity));
+        when(departamentoRepository.findById(1)).thenReturn(Optional.empty());
+
+        MensajeDtoResponse resultado = personaService.actualizarPersona(1, personaDtoRequest);
+
+        assertNotNull(resultado);
+        assertFalse(resultado.getExito());
+        assertEquals("Error inesperado: Departamento no encontrado", resultado.getMensaje());
+        verify(personaRepository, never()).save(any());
     }
 
     @Test
@@ -131,7 +212,9 @@ class PersonaServiceTest {
 
         MensajeDtoResponse resultado = personaService.actualizarPersona(99, personaDtoRequest);
 
-        assertEquals("Persona no encontrada", resultado);
+        assertNotNull(resultado);
+        assertFalse(resultado.getExito());
+        assertEquals("Persona no encontrada", resultado.getMensaje());
         verify(personaRepository, never()).save(any());
     }
 
@@ -142,8 +225,37 @@ class PersonaServiceTest {
 
         MensajeDtoResponse resultado = personaService.borrarLogico(1);
 
-        assertEquals("Persona desactivada exitosamente", resultado);
+        assertNotNull(resultado);
+        assertTrue(resultado.getExito());
+        assertEquals("Persona desactivada exitosamente", resultado.getMensaje());
         assertFalse(personaEntity.getActivo());
+        verify(personaRepository, times(1)).save(any(PersonaEntity.class));
+    }
+
+    @Test
+    void borrarLogico_DataAccessException() {
+        when(personaRepository.findById(1)).thenReturn(Optional.of(personaEntity));
+        when(personaRepository.save(any(PersonaEntity.class)))
+                .thenThrow(new DataAccessResourceFailureException("db"));
+
+        MensajeDtoResponse resultado = personaService.borrarLogico(1);
+
+        assertNotNull(resultado);
+        assertFalse(resultado.getExito());
+        assertEquals("Error de acceso a la base de datos: db", resultado.getMensaje());
+        verify(personaRepository, times(1)).save(any(PersonaEntity.class));
+    }
+
+    @Test
+    void borrarLogico_Exception() {
+        when(personaRepository.findById(1)).thenReturn(Optional.of(personaEntity));
+        when(personaRepository.save(any(PersonaEntity.class))).thenThrow(new RuntimeException("boom"));
+
+        MensajeDtoResponse resultado = personaService.borrarLogico(1);
+
+        assertNotNull(resultado);
+        assertFalse(resultado.getExito());
+        assertEquals("Error inesperado: boom", resultado.getMensaje());
         verify(personaRepository, times(1)).save(any(PersonaEntity.class));
     }
 
@@ -153,7 +265,9 @@ class PersonaServiceTest {
 
         MensajeDtoResponse resultado = personaService.borrarLogico(99);
 
-        assertEquals("Persona no encontrada", resultado);
+        assertNotNull(resultado);
+        assertFalse(resultado.getExito());
+        assertEquals("Persona no encontrada", resultado.getMensaje());
         verify(personaRepository, never()).save(any());
     }
 
@@ -169,6 +283,28 @@ class PersonaServiceTest {
     }
 
     @Test
+    void obtenerPersonasPorDepartamento_DataAccessException() {
+        when(personaRepository.findByDepartamento_Id(1)).thenThrow(new DataAccessResourceFailureException("db"));
+
+        List<PersonaDtoResponse> resultado = personaService.obtenerPersonasPorDepartamento(1);
+
+        assertNotNull(resultado);
+        assertTrue(resultado.isEmpty());
+        verify(personaRepository, times(1)).findByDepartamento_Id(1);
+    }
+
+    @Test
+    void obtenerPersonasPorDepartamento_Exception() {
+        when(personaRepository.findByDepartamento_Id(1)).thenThrow(new RuntimeException("boom"));
+
+        List<PersonaDtoResponse> resultado = personaService.obtenerPersonasPorDepartamento(1);
+
+        assertNotNull(resultado);
+        assertTrue(resultado.isEmpty());
+        verify(personaRepository, times(1)).findByDepartamento_Id(1);
+    }
+
+    @Test
     void obtenerPersonasPorRangoEdad() {
         when(personaRepository.findByEdadBetween(20, 30)).thenReturn(List.of(personaEntity));
 
@@ -178,5 +314,95 @@ class PersonaServiceTest {
         assertEquals(1, resultado.size());
         assertEquals(23, resultado.get(0).getEdad());
         verify(personaRepository, times(1)).findByEdadBetween(20, 30);
+    }
+
+    @Test
+    void obtenerPersonasPorRangoEdad_DataAccessException() {
+        when(personaRepository.findByEdadBetween(20, 30)).thenThrow(new DataAccessResourceFailureException("db"));
+
+        List<PersonaDtoResponse> resultado = personaService.obtenerPersonasPorRangoEdad(20, 30);
+
+        assertNotNull(resultado);
+        assertTrue(resultado.isEmpty());
+        verify(personaRepository, times(1)).findByEdadBetween(20, 30);
+    }
+
+    @Test
+    void obtenerPersonasPorRangoEdad_Exception() {
+        when(personaRepository.findByEdadBetween(20, 30)).thenThrow(new RuntimeException("boom"));
+
+        List<PersonaDtoResponse> resultado = personaService.obtenerPersonasPorRangoEdad(20, 30);
+
+        assertNotNull(resultado);
+        assertTrue(resultado.isEmpty());
+        verify(personaRepository, times(1)).findByEdadBetween(20, 30);
+    }
+
+    @Test
+    void buscarPorNombre() {
+        when(personaRepository.buscarPorNombre("Laura")).thenReturn(List.of(personaEntity));
+
+        List<PersonaDtoResponse> resultado = personaService.buscarPorNombre("Laura");
+
+        assertNotNull(resultado);
+        assertEquals(1, resultado.size());
+        assertEquals(personaEntity.getNombre(), resultado.get(0).getNombre());
+        verify(personaRepository, times(1)).buscarPorNombre("Laura");
+    }
+
+    @Test
+    void buscarPorNombre_DataAccessException() {
+        when(personaRepository.buscarPorNombre("Laura")).thenThrow(new DataAccessResourceFailureException("db"));
+
+        List<PersonaDtoResponse> resultado = personaService.buscarPorNombre("Laura");
+
+        assertNotNull(resultado);
+        assertTrue(resultado.isEmpty());
+        verify(personaRepository, times(1)).buscarPorNombre("Laura");
+    }
+
+    @Test
+    void buscarPorNombre_Exception() {
+        when(personaRepository.buscarPorNombre("Laura")).thenThrow(new RuntimeException("boom"));
+
+        List<PersonaDtoResponse> resultado = personaService.buscarPorNombre("Laura");
+
+        assertNotNull(resultado);
+        assertTrue(resultado.isEmpty());
+        verify(personaRepository, times(1)).buscarPorNombre("Laura");
+    }
+
+    @Test
+    void obtenerPersonasPorEstado() {
+        when(personaRepository.obtenerPersonasPorEstado(true)).thenReturn(List.of(personaEntity));
+
+        List<PersonaDtoResponse> resultado = personaService.obtenerPersonasPorEstado(true);
+
+        assertNotNull(resultado);
+        assertEquals(1, resultado.size());
+        assertEquals(personaEntity.getNombre(), resultado.get(0).getNombre());
+        verify(personaRepository, times(1)).obtenerPersonasPorEstado(true);
+    }
+
+    @Test
+    void obtenerPersonasPorEstado_DataAccessException() {
+        when(personaRepository.obtenerPersonasPorEstado(true)).thenThrow(new DataAccessResourceFailureException("db"));
+
+        List<PersonaDtoResponse> resultado = personaService.obtenerPersonasPorEstado(true);
+
+        assertNotNull(resultado);
+        assertTrue(resultado.isEmpty());
+        verify(personaRepository, times(1)).obtenerPersonasPorEstado(true);
+    }
+
+    @Test
+    void obtenerPersonasPorEstado_Exception() {
+        when(personaRepository.obtenerPersonasPorEstado(true)).thenThrow(new RuntimeException("boom"));
+
+        List<PersonaDtoResponse> resultado = personaService.obtenerPersonasPorEstado(true);
+
+        assertNotNull(resultado);
+        assertTrue(resultado.isEmpty());
+        verify(personaRepository, times(1)).obtenerPersonasPorEstado(true);
     }
 }
