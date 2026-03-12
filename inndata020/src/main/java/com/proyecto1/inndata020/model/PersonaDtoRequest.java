@@ -11,6 +11,6 @@ public class PersonaDtoRequest {
     private Integer edad;
     private Boolean activo;
 
-    @JsonProperty("id_departamento") // ✅ le dice a Jackson cómo leer el campo
-    private Integer idDepartamento; // ✅ camelCase
+    @JsonProperty("id_departamento") // Como se lee el Json
+    private Integer idDepartamento; // camelCase
 }

@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 
-
 @Entity
 @Table(name = "persona")
 public class PersonaEntity {
@@ -19,7 +18,7 @@ public class PersonaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_persona") // columna en la BD
-    private Integer idPersona;   // atributo en camelCase
+    private Integer idPersona; // atributo en camelCase
 
     @Column(name = "nombre")
     private String nombre;

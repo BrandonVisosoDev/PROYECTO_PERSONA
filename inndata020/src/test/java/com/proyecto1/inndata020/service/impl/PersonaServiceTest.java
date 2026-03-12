@@ -1,6 +1,4 @@
 package com.proyecto1.inndata020.service.impl;
-
-import com.proyecto1.inndata020.model.DepartamentoDtoRequest;
 import com.proyecto1.inndata020.model.PersonaDtoRequest;
 import com.proyecto1.inndata020.model.PersonaDtoResponse;
 import com.proyecto1.inndata020.entity.DepartamentoEntity;
@@ -57,7 +55,7 @@ class PersonaServiceTest {
         personaDtoRequest.setDireccion("Calle Primavera 25");
         personaDtoRequest.setEdad(23);
         personaDtoRequest.setActivo(true);
-        personaDtoRequest.setId_departamento(1);
+        personaDtoRequest.setIdDepartamento(1);
     }
 
     @Test

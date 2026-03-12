@@ -8,17 +8,17 @@ import java.util.List;
 
 public interface PersonaRepository extends JpaRepository<PersonaEntity, Integer> {
 
-    // JPA Derivado
-    List<PersonaEntity> findByDepartamento_Id(Integer idDepartamento); // ✅ navega la relación
+    // JPA Derivado - se quedan igual ✅
+    List<PersonaEntity> findByDepartamento_Id(Integer idDepartamento);
 
-    // Query
-    @Query("SELECT p FROM PersonaEntity p WHERE p.departamento.id = :idDepartamento")
-    List<PersonaEntity> findByDepartamento(@Param("idDepartamento") Integer idDepartamento); // ✅
+    List<PersonaEntity> findByEdadBetween(Integer minEdad, Integer maxEdad);
 
-    // JPA Derivado
-    List<PersonaEntity> findByEdadBetween(Integer minEdad, Integer maxEdad); // ✅ int → Integer
+    // Query - ahora con propósito distinto ✅
+    @Query("SELECT p FROM PersonaEntity p WHERE LOWER(p.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))")
+    List<PersonaEntity> buscarPorNombre(@Param("nombre") String nombre);
 
-    // Query
-    @Query("SELECT p FROM PersonaEntity p WHERE p.edad BETWEEN :minEdad AND :maxEdad")
-    List<PersonaEntity> findByEdadBetweenCustom(@Param("minEdad") Integer minEdad, @Param("maxEdad") Integer maxEdad); // ✅
+    @Query("SELECT p FROM PersonaEntity p WHERE p.activo = :activo")
+    List<PersonaEntity> obtenerPersonasPorEstado(@Param("activo") Boolean activo);
+
+
 }

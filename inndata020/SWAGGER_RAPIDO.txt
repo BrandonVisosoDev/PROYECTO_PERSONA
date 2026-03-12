@@ -1,0 +1,153 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                      🚀 SWAGGER - GUÍA RÁPIDA INICIO                         ║
+║                                                                              ║
+║                            ¡Comienza en 3 pasos!                             ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+✅ SWAGGER HA SIDO INSTALADO Y COMPILADO EXITOSAMENTE
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 3 PASOS PARA USAR SWAGGER:
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ PASO 1: Inicia la aplicación                                        │
+└─────────────────────────────────────────────────────────────────────┘
+
+Opción A - Terminal (RECOMENDADO):
+
+  cd E:\CURSOS_NAOKY\INNDATA\PROYECTOS\Proyecto_Clonado\inndata020
+  .\mvnw spring-boot:run
+
+Opción B - IntelliJ IDEA:
+
+  1. Abre el proyecto
+  2. Busca: src/main/java/.../Inndata020Application.java
+  3. Click derecho → Run
+
+Espera a que veas en la consola:
+  "Tomcat started on port(s): 8080"
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ PASO 2: Abre tu navegador                                           │
+└─────────────────────────────────────────────────────────────────────┘
+
+Copia y pega esta URL en tu navegador:
+
+  http://localhost:8080/swagger-ui.html
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ PASO 3: ¡Usa Swagger!                                               │
+└─────────────────────────────────────────────────────────────────────┘
+
+Verás:
+  ✓ Todos tus endpoints REST documentados
+  ✓ Parámetros requeridos
+  ✓ Tipos de datos
+  ✓ Respuestas esperadas
+
+Puedes:
+  ✓ Probar cada endpoint directamente
+  ✓ Ver ejemplos de respuestas
+  ✓ Descargar la especificación OpenAPI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📍 URLS ÚTILES:
+
+Swagger UI (Interfaz visual):
+  http://localhost:8080/swagger-ui.html
+
+OpenAPI Spec (Especificación JSON):
+  http://localhost:8080/v2/api-docs
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📦 LO QUE SE INSTALÓ:
+
+✅ Swagger 3.0.0 (Springfox)
+✅ OpenAPI 3.0 Specification
+✅ Swagger UI (interfaz visual)
+✅ Configuración automática
+✅ Documentación automática
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚡ CARACTERÍSTICAS:
+
+✓ Documentación automática de todos tus endpoints
+✓ No requiere código adicional
+✓ Interfaz moderna e interactiva
+✓ Pruebas directas de APIs
+✓ Especificación OpenAPI para consumo de terceros
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎁 BONUS - Personalización (Opcional):
+
+Si quieres mejorar la documentación, añade anotaciones en tus
+controllers:
+
+  @Api(tags = "Departamentos")
+  @ApiOperation(value = "Obtener departamento")
+  @ApiResponses({
+    @ApiResponse(code = 200, message = "Éxito"),
+    @ApiResponse(code = 404, message = "No encontrado")
+  })
+
+¡Pero es completamente opcional! Swagger ya documenta todo
+automáticamente sin estas anotaciones.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❓ PROBLEMAS COMUNES:
+
+P: "No veo Swagger"
+R: 1. Verifica que la aplicación está ejecutando en puerto 8080
+   2. Revisa en la consola que dice "Tomcat started on port(s): 8080"
+   3. Recarga la página (Ctrl+F5)
+
+P: "Error 404"
+R: 1. Asegúrate que escribiste bien la URL
+   2. Verifica que es http://localhost:8080/swagger-ui.html
+   3. (sin slash final)
+
+P: "Swagger aparece pero sin mis endpoints"
+R: 1. Asegúrate que tus controllers usan @RestController
+   2. Que estén en el package: com.proyecto1.inndata020
+   3. Reinicia la aplicación
+
+P: "Puerto 8080 en uso"
+R: 1. Abre application.properties
+   2. Cambia: server.port=8081
+   3. Accede a: http://localhost:8081/swagger-ui.html
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📝 ARCHIVOS QUE FUERON MODIFICADOS:
+
+1. pom.xml
+   └─ Agregadas dependencias de Swagger
+
+2. src/main/resources/application.properties
+   └─ Agregadas propiedades de Swagger
+
+3. src/main/java/.../config/SwaggerConfig.java
+   └─ Nuevo archivo de configuración
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ ¡LISTO!
+
+Solo ejecuta tu aplicación y abre:
+
+    http://localhost:8080/swagger-ui.html
+
+¡Tu API está completamente documentada! 🚀
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+

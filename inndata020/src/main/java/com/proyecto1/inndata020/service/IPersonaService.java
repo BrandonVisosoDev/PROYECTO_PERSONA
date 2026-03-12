@@ -1,5 +1,6 @@
 package com.proyecto1.inndata020.service;
 
+import com.proyecto1.inndata020.model.MensajeDtoResponse;
 import com.proyecto1.inndata020.model.PersonaDtoRequest;
 import com.proyecto1.inndata020.model.PersonaDtoResponse;
 
@@ -13,11 +14,16 @@ public interface IPersonaService {
     Optional<PersonaDtoResponse> buscarPorId(Integer id);
 
     // Create / Update / Delete
-    String guardarPersona(PersonaDtoRequest persona);
-    String actualizarPersona(Integer id, PersonaDtoRequest persona);
-    String borrarLogico(Integer id);
+    MensajeDtoResponse guardarPersona(PersonaDtoRequest persona);
+    MensajeDtoResponse actualizarPersona(Integer id, PersonaDtoRequest persona);
+    MensajeDtoResponse borrarLogico(Integer id);
 
     // Métodos personalizados
     List<PersonaDtoResponse> obtenerPersonasPorDepartamento(Integer idDepartamento);
     List<PersonaDtoResponse> obtenerPersonasPorRangoEdad(Integer minEdad, Integer maxEdad);
+
+    // Métodos con QUERY
+    List<PersonaDtoResponse> buscarPorNombre(String nombre);
+    List<PersonaDtoResponse> obtenerPersonasPorEstado(Boolean activo);
+
 }
